@@ -4,6 +4,7 @@ angular.module("app").factory("ShoppingList", function () {
             this.list = [];
         }
 
+
         addItem(shoppingItem) {
             this.list.push(shoppingItem);
         }

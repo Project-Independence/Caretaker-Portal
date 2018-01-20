@@ -19,12 +19,16 @@
 
     <script src="app.js"></script>
 
+    <!-----------------  Classes  ------------------->
     <script src="Classes/ride-request.js"></script>
     <script src="Classes/shopping-list.js"></script>
     <script src="Classes/shopping-item.js"></script>
 
+    <!-----------------  Services  ------------------->
     <script src="Services/aws.service.js"></script>
     <script src="Services/senior-data.service.js"></script>
+
+    <!-----------------  Controllers  ------------------->
     <script src="Controllers/controller.js"></script>
 </head>
 
@@ -55,7 +59,7 @@
                     Claim
                 </div>
             </div>
-            <div ng-repeat="element in vm.events">
+            <div ng-repeat="element in vm.seniorDataService.rideRequests">
                 <div layout="row" class="event">
                     <div class="date">
                         {{element.date}} at {{element.time}}</div>
@@ -68,16 +72,16 @@
             </div>
         </md-tab>
         <!------------------------------------------------------------------------>
-        <md-tab label=" Shopping ">
+        <md-tab label="Shopping">
             <div layout="row" class="shopping-item" style="height: 30px; background: #dddddd">
                 <div class="shopping-item-quantity" style="border: none">
                     #</div>
                 <div class="shopping-item-quantity" style="border: none">Item</div>
             </div>
-            <div ng-repeat="item in vm.shoppingItems ">
+            <div ng-repeat="item in vm.seniorDataService.shoppingList.list">
                 <div layout="row " layout-align="start center " class="shopping-item ">
                     <div class="shopping-item-quantity ">{{item.quantity}}</div>
-                    <div class="shopping-item-name ">{{item.item}}</div>
+                    <div class="shopping-item-name ">{{item.name}}</div>
 
                     <div layout="column " layout-align="center end " style="width: 100% ">
                         <div layout="row ">
@@ -91,7 +95,7 @@
             </div>
         </md-tab>
         <!------------------------------------------------------------------------>
-        <md-tab label="Errands " style="z-index: 10 ">
+        <md-tab label="Errands" style="z-index: 10 ">
             <div layout="row" class="event" style="height: 30px; background: #dddddd">
                 <div class="date" style="border: none">
                     Task</div>

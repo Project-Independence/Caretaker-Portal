@@ -4,9 +4,6 @@ angular.module("app").service("AWSService", function (RideRequest, ShoppingList,
             this.initAWS();
             this.documentClient = new AWS.DynamoDB.DocumentClient();
             this.sns = new AWS.SNS();
-
-            this.getRideRequests();
-            this.getShoppingList();
         }
 
         initAWS() {
@@ -33,8 +30,11 @@ angular.module("app").service("AWSService", function (RideRequest, ShoppingList,
                             id: item.id,
                             time: item.time
                         });
-                        requests.push(requests);
+                        requests.push(request);
                     })
+                    if (typeof callbackFn === 'function') {
+                        callbackFn(err, requests);
+                    }
                 }
             });
         }
@@ -45,7 +45,7 @@ angular.module("app").service("AWSService", function (RideRequest, ShoppingList,
             };
             this.documentClient.scan(params, (err, data) => {
                 if (err) {
-                    console.log(err);
+                    callbackFn(err);
                 } else {
                     let shoppingList = new ShoppingList();
                     data.Items.forEach((item) => {
@@ -56,8 +56,10 @@ angular.module("app").service("AWSService", function (RideRequest, ShoppingList,
 
                         });
                         shoppingList.addItem(shoppingItem);
-                    })
-                    console.log(shoppingList);
+                    });
+                    if (typeof callbackFn === 'function') {
+                        callbackFn(err, shoppingList);
+                    }
                 }
             });
         }
