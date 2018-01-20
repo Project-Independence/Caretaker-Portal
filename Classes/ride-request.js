@@ -1,4 +1,4 @@
-angular.module("app").factory("RideRequest", function () {
+angular.module("app").factory("RideRequest", function (AWSService) {
     class RideRequest {
         constructor(descriptor) {
             //this.rideID = descriptor.rideID;
@@ -15,7 +15,9 @@ angular.module("app").factory("RideRequest", function () {
             this.time = descriptor.time; // deprec (to arrival/pickup)
         }
 
-        claim() {}
+        toggleClaim(claim) {
+            AWSService.toggleClaim(this, claim);
+        }
 
         cancel() {}
 

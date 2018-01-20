@@ -1,4 +1,4 @@
-angular.module("app").service("AWSService", function (RideRequest, ShoppingList, ShoppingItem) {
+angular.module("app").service("AWSService", function () {
     class AWSService {
         constructor() {
             this.initAWS();
@@ -19,22 +19,9 @@ angular.module("app").service("AWSService", function (RideRequest, ShoppingList,
             };
             this.documentClient.scan(params, (err, data) => {
                 if (err) {
-                    callbackFn(err);
+                    callbackFn(err, null);
                 } else {
-                    let requests = [];
-                    data.Items.forEach((item) => {
-                        let request = new RideRequest({
-                            claimed: item.claimed,
-                            date: item.date,
-                            event: item.event,
-                            id: item.id,
-                            time: item.time
-                        });
-                        requests.push(request);
-                    })
-                    if (typeof callbackFn === 'function') {
-                        callbackFn(err, requests);
-                    }
+                    callbackFn(err, data.Items);
                 }
             });
         }
@@ -45,23 +32,64 @@ angular.module("app").service("AWSService", function (RideRequest, ShoppingList,
             };
             this.documentClient.scan(params, (err, data) => {
                 if (err) {
-                    callbackFn(err);
+                    callbackFn(err, null);
                 } else {
-                    let shoppingList = new ShoppingList();
-                    data.Items.forEach((item) => {
-                        let shoppingItem = new ShoppingItem({
-                            name: item.item,
-                            timestamp: item.timestamp,
-                            quantity: item.quantity
-
-                        });
-                        shoppingList.addItem(shoppingItem);
-                    });
-                    if (typeof callbackFn === 'function') {
-                        callbackFn(err, shoppingList);
-                    }
+                    callbackFn(err, data.Items);
                 }
             });
+        }
+
+        recordChange() {
+            var params = {
+                Key: {
+                    id: "lastChange"
+                },
+                AttributeUpdates: {
+                    time: {
+                        Action: 'PUT',
+                        Value: Date.now()
+                    },
+                },
+                TableName: 'UIData'
+            }
+            this.documentClient.update(params, function (err, data) {});
+        }
+
+        toggleClaim(request, claim) {
+            if (claim) {
+                //                const subject = "Ride Confirmation";
+                //                const body = "You picked up a ride for '" + this.event + "' on: " + this.date + " at " + this.time + ". We will send you another reminder prior to the pickup time.";
+                //                this.sendEmail(subject, body);
+            }
+            var params = {
+                Key: {
+                    id: request.id
+                },
+                AttributeUpdates: {
+                    claimed: {
+                        Action: 'PUT',
+                        Value: claim
+                    },
+                },
+                TableName: 'Rides'
+            }
+            this.documentClient.update(params, function (err, data) {});
+        }
+
+        togglePickup(item, pickup) {
+            var params = {
+                Key: {
+                    item: item.name
+                },
+                AttributeUpdates: {
+                    done: {
+                        Action: 'PUT',
+                        Value: item.pickedUp
+                    },
+                },
+                TableName: 'Shopping'
+            }
+            this.documentClient.update(params, function (err, data) {});
         }
     }
     let srv = new AWSService();

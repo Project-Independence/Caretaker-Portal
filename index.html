@@ -50,74 +50,60 @@
     <!--    <img src="cigna_logo.png" style="height: 80px; background-color: white; margin-right: 10px; border-bottom: 1px solid #dbdbdb;">-->
     <md-tabs md-dynamic-height md-border-bottom>
         <!------------------------  ------------------------------------------------>
-        <md-tab label="Rides">
-            <div layout="row" class="event" style="height: 30px; background: #dddddd">
-                <div class="date" style="border: none">
-                    Time</div>
-                <div class="date" style="border: none">Destination</div>
-                <div class="date" layout="row" style="width:100%; padding-right: 10px; border: none" layout-align="end center">
-                    Claim
-                </div>
-            </div>
-            <div ng-repeat="element in vm.seniorDataService.rideRequests">
-                <div layout="row" class="event">
-                    <div class="date">
-                        {{element.date}} at {{element.time}}</div>
-                    <div class="description">{{element.event}}</div>
-                    <div layout="row" style="width:100%" layout-align="end center">
-                        <md-switch ng-model="element.claimed" aria-label="Disabled" ng-change="vm.toggleRide(element)" style="margin: 0px; transform: scale(1.5); padding-right: 10px" md-no-ink ng-model="hasInk">
-                        </md-switch>
+        <md-tab>
+            <md-tab-label>
+                <i class="material-icons">directions_car</i>
+            </md-tab-label>
+            <md-tab-body>
+                <div layout="row" class="event" style="height: 30px; background: #dddddd">
+                    <div class="date" style="border: none">
+                        Time</div>
+                    <div class="date" style="border: none">Destination</div>
+                    <div class="date" layout="row" style="width:100%; padding-right: 10px; border: none" layout-align="end center">
+                        Claim
                     </div>
                 </div>
-            </div>
+                <div ng-repeat="element in vm.seniorDataService.rideRequests">
+                    <div layout="row" class="event">
+                        <div class="date">
+                            {{element.date}} at {{element.time}}</div>
+                        <div class="description">{{element.event}}</div>
+                        <div layout="row" style="width:100%" layout-align="end center">
+                            <md-switch ng-model="element.claimed" aria-label="Disabled" ng-change="element.toggleClaim(element.claimed)" style="margin: 0px; transform: scale(1.5); padding-right: 10px" md-no-ink ng-model="hasInk">
+                            </md-switch>
+                        </div>
+                    </div>
+                </div>
+            </md-tab-body>
         </md-tab>
         <!------------------------------------------------------------------------>
-        <md-tab label="Shopping">
-            <div layout="row" class="shopping-item" style="height: 30px; background: #dddddd">
-                <div class="shopping-item-quantity" style="border: none">
-                    #</div>
-                <div class="shopping-item-quantity" style="border: none">Item</div>
-            </div>
-            <div ng-repeat="item in vm.seniorDataService.shoppingList.list">
-                <div layout="row " layout-align="start center " class="shopping-item ">
-                    <div class="shopping-item-quantity ">{{item.quantity}}</div>
-                    <div class="shopping-item-name ">{{item.name}}</div>
+        <md-tab>
+            <md-tab-label>
+                <i class="material-icons">shopping_cart</i>
+            </md-tab-label>
+            <md-tab-body>
+                <div layout="row" class="shopping-item" style="height: 30px; background: #dddddd">
+                    <div class="shopping-item-quantity" style="border: none">
+                        #</div>
+                    <div class="shopping-item-quantity" style="border: none">Item</div>
+                </div>
+                <div ng-repeat="item in vm.seniorDataService.shoppingList.list">
+                    <div layout="row " layout-align="start center " class="shopping-item ">
+                        <div class="shopping-item-quantity ">{{item.quantity}}</div>
+                        <div class="shopping-item-name ">{{item.name}}</div>
 
-                    <div layout="column " layout-align="center end " style="width: 100% ">
-                        <div layout="row ">
-                            <div layout="row " layout-align="center end ">
-                                <md-checkbox aria-label="Disabled" ng-model="item.done" ng-change="vm.toggleShoppingItem(item)" style="margin: 0px">
-                                </md-checkbox>
+                        <div layout="column " layout-align="center end " style="width: 100% ">
+                            <div layout="row ">
+                                <div layout="row " layout-align="center end ">
+                                    <md-checkbox aria-label="Disabled" ng-model="item.pickedUp" ng-change="item.togglePickup(item.pickedUp)" style="margin: 0px">
+                                    </md-checkbox>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </md-tab-body>
         </md-tab>
-        <!------------------------------------------------------------------------>
-        <md-tab label="Errands" style="z-index: 10 ">
-            <div layout="row" class="event" style="height: 30px; background: #dddddd">
-                <div class="date" style="border: none">
-                    Task</div>
-            </div>
-            <div ng-repeat="item in vm.errands ">
-                <div layout="row " layout-align="start start " class="errand ">
-                    <div class="errand-task ">{{item.task}}</div>
-                    <div layout="row" style="width: 100%" layout-align="end end">
-                        <md-button class="md-small" style="width: 40px">
-                            <i class="material-icons">add</i>
-                        </md-button>
-                    </div>
-                </div>
-            </div>
-        </md-tab>
-        <!------------------------------------------------------------------------>
-        <!--
-<md-tab label="Calender ">
-
-
-</md-tab>
--->
         <!------------------------------------------------------------------------>
 
     </md-tabs>
