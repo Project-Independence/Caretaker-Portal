@@ -1,10 +1,16 @@
-angular.module("app").controller("MainController",
+angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, $window, $scope) {
     class MainController {
-        constructor(AWSService, $mdDialog, SeniorDataService) {
+        constructor() {
             this.AWSService = AWSService;
             this.seniorDataService = SeniorDataService;
-
             this.sns = new AWS.SNS();
+            this.currentView = 'Home';
+            setInterval(() => {
+                if (SeniorDataService.changePending) {
+                    $scope.$apply();
+                    SeniorDataService.changePending = false;
+                }
+            }, 500);
         }
 
         sendEmail(subject, body) {
@@ -18,4 +24,14 @@ angular.module("app").controller("MainController",
                 else console.log(data); // successful response
             });
         }
-    });
+
+        toggleSidebar() {
+            $mdSidenav('sidenav').toggle();
+        }
+
+        selectView(name) {
+            this.currentView = name;
+        }
+    }
+    return new MainController();
+});

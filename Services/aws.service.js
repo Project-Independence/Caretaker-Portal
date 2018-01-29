@@ -4,6 +4,8 @@ angular.module("app").service("AWSService", function () {
             this.initAWS();
             this.documentClient = new AWS.DynamoDB.DocumentClient();
             this.sns = new AWS.SNS();
+
+            this.previousTimestamp = null;
         }
 
         initAWS() {
@@ -29,6 +31,19 @@ angular.module("app").service("AWSService", function () {
         getShoppingList(callbackFn) {
             var params = {
                 TableName: 'Shopping'
+            };
+            this.documentClient.scan(params, (err, data) => {
+                if (err) {
+                    callbackFn(err, null);
+                } else {
+                    callbackFn(err, data.Items);
+                }
+            });
+        }
+
+        getActivities(callbackFn) {
+            var params = {
+                TableName: 'Activity'
             };
             this.documentClient.scan(params, (err, data) => {
                 if (err) {
@@ -90,6 +105,28 @@ angular.module("app").service("AWSService", function () {
                 TableName: 'Shopping'
             }
             this.documentClient.update(params, function (err, data) {});
+        }
+
+        getChangeStatus(callbackFn) {
+            var params = {
+                TableName: 'UIData',
+                Key: {
+                    id: 'lastChange'
+                }
+
+            };
+            this.documentClient.get(params, (err, data) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    if (data.Item.time != this.previousTimestamp) {
+                        this.previousTimestamp = data.Item.time;
+                        callbackFn(true);
+                    } else {
+                        callbackFn(false);
+                    }
+                }
+            });
         }
     }
     let srv = new AWSService();

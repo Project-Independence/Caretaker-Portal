@@ -2,6 +2,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
 
 <head>
+    <style type="text/css">
+        a {
+            text-decoration: none
+        }
+
+    </style>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -11,7 +17,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
 
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.153.0.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="Styles/styles.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
@@ -19,10 +24,14 @@
 
     <script src="app.js"></script>
 
+    <!-----------------  Styles -------------------->
+    <link rel="stylesheet" type="text/css" href="Styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="Styles/activity-feed.css">
     <!-----------------  Classes  ------------------->
     <script src="Classes/ride-request.js"></script>
     <script src="Classes/shopping-list.js"></script>
     <script src="Classes/shopping-item.js"></script>
+    <script src="Classes/activity.js"></script>
 
     <!-----------------  Services  ------------------->
     <script src="Services/aws.service.js"></script>
@@ -34,23 +43,85 @@
 
 <body ng-app="app" ng-controller="MainController as vm">
     <md-toolbar md-scroll-shrink>
-        <div class="md-toolbar-tools" layout="row">
-            <div style="width: 400px">Caretaker Portal</div>
-            <div layout="row" style="width: 100%" layout-align="end end">
-                <md-button ng-click="vm.showAdvanced()" class="md-small" style="width: 40px">
-                    <i class="material-icons">today</i>
-                </md-button>
-                <md-button ng-click="vm.showAdvanced()" class="md-small" style="width: 40px">
-                    <i class="material-icons">list</i>
-                </md-button>
+        <div class="md-toolbar-tools" style="background: #004986" layout="row">
+            <div layout="row" style="width: 100%" layout-align="start center">
+                <div class="avatar" ng-click="vm.toggleSidebar()">
+                    <img src="assets/pro-pic.jpeg">
+                    <div class="hover">
+                    </div>
+                </div>
+                <div layout="row" layout-align="start center">
+                    <div>{{vm.currentView}}</div>
+                </div>
             </div>
         </div>
     </md-toolbar>
 
-    <!--    <img src="cigna_logo.png" style="height: 80px; background-color: white; margin-right: 10px; border-bottom: 1px solid #dbdbdb;">-->
-    <md-tabs md-dynamic-height md-border-bottom>
+
+
+    <md-sidenav class="md-sidenav-left" md-component-id="sidenav" md-disable-backdrop md-whiteframe="4">
+        <div layout="column" layout-align="center center" style="width=100%; height=100%">
+            <div class="pro-pic">
+                <img src="assets/pro-pic.jpeg">
+            </div>
+        </div>
+    </md-sidenav>
+
+
+    <md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always">
         <!------------------------  ------------------------------------------------>
-        <md-tab>
+        <md-tab md-on-select="vm.selectView('Home')">
+            <md-tab-label>
+                <i class="material-icons">home</i>
+            </md-tab-label>
+            <md-tab-body>
+                <div ng-repeat="item in vm.test">
+                    {{item}}
+                </div>
+                <div class="activity-feed">
+                    <div class="feed-item">
+                        <div class="date">About an hour ago</div>
+                        <div class="text"><a href="single-need.php">Greg</a> claimed a <a href="single-need.php">ride</a></div>
+                    </div>
+
+                    <div class="feed-item">
+                        <div class="date">3 hours ago</div>
+                        <div class="text"><a href="single-need.php">Susie</a> picked up tomatoes
+                        </div>
+                    </div>
+
+                    <div class="feed-item-caretaker">
+                        <div class="date">Yesterday</div>
+                        <div class="text"><a href="single-need.php">Bertha</a> requested a <a href="single-need.php">ride</a></div>
+                    </div>
+
+                    <div class="feed-item">
+                        <div class="date">Yesterday</div>
+                        <div class="text"><a href="single-need.php">Greg</a> picked up some shopping <a href="single-need.php">items</a>
+                        </div>
+                    </div>
+
+                    <div class="feed-item-caretaker">
+                        <div class="date">Two days ago</div>
+                        <div class="text"><a href="single-need.php">Bertha</a> added some <a href="single-need.php">items</a> to her shopping list
+                        </div>
+                    </div>
+
+                    <div class="feed-item">
+                        <div class="date">Three days ago</div>
+                        <div class="text"><a href="single-need.php">Susie</a> claimed a ride
+                        </div>
+                    </div>
+
+                    <div class="feed-item-caretaker">
+                        <div class="date">Three days ago</div>
+                        <div class="text"><a href="single-need.php">Bertha</a> requested a <a href="single-need.php">ride</a></div>
+                    </div>
+                </div>
+            </md-tab-body>
+        </md-tab>
+        <!------------------------  ------------------------------------------------>
+        <md-tab md-on-select="vm.selectView('Rides')">
             <md-tab-label>
                 <i class="material-icons">directions_car</i>
             </md-tab-label>
@@ -77,7 +148,7 @@
             </md-tab-body>
         </md-tab>
         <!------------------------------------------------------------------------>
-        <md-tab>
+        <md-tab md-on-select="vm.selectView('Shopping')">
             <md-tab-label>
                 <i class="material-icons">shopping_cart</i>
             </md-tab-label>
@@ -104,7 +175,14 @@
                 </div>
             </md-tab-body>
         </md-tab>
-        <!------------------------------------------------------------------------>
+        <!------------------------------------------------------------------------->
+        <md-tab md-on-select="vm.selectView('Messages')">
+            <md-tab-label>
+                <i class="material-icons">message</i>
+            </md-tab-label>
+            <md-tab-body>
+            </md-tab-body>
+        </md-tab>
 
     </md-tabs>
 </body>
