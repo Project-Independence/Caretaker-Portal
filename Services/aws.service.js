@@ -4,15 +4,82 @@ angular.module("app").service("AWSService", function () {
             this.initAWS();
             this.documentClient = new AWS.DynamoDB.DocumentClient();
             this.sns = new AWS.SNS();
-
+            this.cognito = new AWS.CognitoIdentityServiceProvider();
             this.previousTimestamp = null;
-        }
 
+            // this.signup('dz_ludcas', 'myPassword1234%', 'dzlucasdz@gmail.com');
+            //  this.login('dz_lucas', 'myPassword1234%');
+        }
         initAWS() {
-            AWS.config.region = 'us-east-1';
+            AWS.config.update({
+                region: 'us-east-1'
+            });
+            AWSCognito.config.region = 'us-east-1';
             AWS.config.credentials = new AWS.CognitoIdentityCredentials({
                 IdentityPoolId: 'us-east-1:b2600055-0fc7-4bb3-9bd0-6ba8fa16fd4f'
             });
+            let poolData = {
+                UserPoolId: 'us-east-1_GbIl2bvUD',
+                ClientId: '1ctlarndvglpi4tdfb3v96796f'
+            };
+            this.userPool = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
+
+        }
+
+        signup(username, password, email) {
+            var attribute = {
+                Name: 'email',
+                Value: email
+            };
+            var attributeEmail = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserAttribute(attribute);
+            var attributeList = [];
+
+            attributeList.push(attributeEmail);
+            var cognitoUser;
+
+            this.userPool.signUp(username, password, attributeList, null, function (err, result) {
+                if (err) {
+                    alert(err);
+                    return;
+                }
+                cognitoUser = result.user;
+            });
+        }
+
+        login(username, password, callbackFn) {
+            var authenticationData = {
+                Username: username,
+                Password: password,
+            };
+            var authenticationDetails = new AWSCognito.CognitoIdentityServiceProvider.AuthenticationDetails(authenticationData);
+            var userData = {
+                Username: username,
+                Pool: this.userPool
+            };
+            var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
+            cognitoUser.authenticateUser(authenticationDetails, {
+                onSuccess: function (result) {
+                    callbackFn(true);
+                    //console.log('access token + ' + result.getAccessToken().getJwtToken());
+                    //console.log('idToken + ' + result.idToken.jwtToken);
+                },
+
+                onFailure: function (err) {
+                    callbackFn(false);
+                    alert(err);
+                },
+                newPasswordRequired: function () {
+                    cognitoUser.changePassword('!Guitar648', '?Guitar648', function (err, result) {
+                        if (err) {
+                            alert(err);
+                            return;
+                        }
+                        console.log('call result: ' + result);
+                    });
+                }
+
+            });
+
         }
 
         getRideRequests(callbackFn) {

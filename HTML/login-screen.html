@@ -1,19 +1,75 @@
-<md-dialog aria-label="Mango (Fruit)">
-    <form ng-cloak style="height: 100%">
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2>Under Construction</h2>
-                <span flex></span>
-                <md-button class="md-icon-button" ng-click="cancel()">
-                    <md-icon aria-label="Close dialog"></md-icon>
-                </md-button>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login V16</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+
+    <script src="/node_modules/amazon-cognito-identity-js/dist/aws-cognito-sdk.js"></script>
+    <script src="/node_modules/amazon-cognito-identity-js/dist/amazon-cognito-identity.js"></script>
+    <script src="/node_modules/aws-sdk/dist/aws-sdk.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/png" href="/Assets/icons/favicon.ico" />
+
+    <link rel="stylesheet" type="text/css" href="/Assets/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/Assets/Linearicons-Free-v1.0.0/icon-font.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/Styles/util.css">
+    <link rel="stylesheet" type="text/css" href="/Styles/login-screen.css">
+
+
+    <script src="/app.js"></script>
+
+    <script src="/Services/aws.service.js"></script>
+    <script src="/Controllers/login.controller.js"></script>
+</head>
+
+<body>
+    <div ng-app="app" ng-controller="LoginController as vm">
+        <div class="container-login100" style="background-image: url('/Assets/bg-01.jpg');">
+            <div class="wrap-login100 p-t-30 p-b-50">
+                <span class="login100-form-title p-b-41">
+					Portal Login
+				</span>
+                <div class="login100-form p-b-33 p-t-5">
+                    <div class="wrap-input100 validate-input" data-validate="Enter username">
+                        <input class="input100" type="text" name="username" placeholder="User name" ng-model="vm.username">
+                        <span class="focus-input100" data-placeholder="&#xe82a;"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                        <input class="input100" type="password" name="pass" placeholder="Password" ng-model="vm.password">
+                        <span class="focus-input100" data-placeholder="&#xe80f;"></span>
+                    </div>
+
+                    <div class="container-login100-form-btn m-t-32">
+                        <button ng-click="vm.login()" class="login100-form-btn">
+							Login
+                        </button>
+                    </div>
+
+                </div>
             </div>
-        </md-toolbar>
+        </div>
+    </div>
 
-        <md-dialog-content>
-        </md-dialog-content>
 
-        <md-dialog-actions layout="row">
-        </md-dialog-actions>
-    </form>
-</md-dialog>
+    <div id="dropDownSelect1"></div>
+
+</body>
+
+</html>

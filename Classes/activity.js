@@ -1,4 +1,4 @@
-angular.module("app").factory("Activity", function () {
+angular.module("app").factory("Activity", function (AWSService) {
     class Activity {
         constructor(descriptor) {
             Object.assign(this, {
@@ -8,6 +8,10 @@ angular.module("app").factory("Activity", function () {
                 date: '',
                 time: ''
             }, descriptor);
+        }
+
+        log() {
+
         }
     }
 
