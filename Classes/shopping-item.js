@@ -1,4 +1,4 @@
-angular.module("app").factory("ShoppingItem", function (AWSService) {
+angular.module("app").factory("ShoppingItem", function (AWSService, Activity) {
     class ShoppingItem {
         constructor(descriptor) {
             this.timestamp = descriptor.timestamp;
@@ -10,6 +10,17 @@ angular.module("app").factory("ShoppingItem", function (AWSService) {
 
         togglePickup(pickedUp) {
             AWSService.togglePickup(this, pickedUp);
+            var activityData;
+            var d = new Date();
+            if (pickedUp) {
+                activityData = "Caretaker picked up an item."
+                let activity = new Activity({
+                    id: Date.now(),
+                    data: activityData,
+                    date: d.toDateString()
+                });
+                activity.logActivity();
+            }
         }
     }
 

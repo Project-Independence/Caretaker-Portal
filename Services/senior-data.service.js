@@ -8,14 +8,14 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
             this.changePending = false;
             this.previousTimeStamp = null;
 
-            setInterval(() => {
-                AWSService.getChangeStatus((data) => {
-                    if (data === true) {
-                        this.init();
-                        this.changePending = true;
-                    }
-                });
-            }, 500)
+            //            setInterval(() => {
+            //                AWSService.getChangeStatus((data) => {
+            //                    if (data === true) {
+            //                        this.init();
+            //                        this.changePending = true;
+            //                    }
+            //                });
+            //            }, 500)
         }
 
         init() {
@@ -81,10 +81,10 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
                     data.forEach((item) => {
                         let activity = new Activity({
                             id: item.ActivityID,
-                            data: item.ActivityData,
-                            caretakerID: item.CaretakerID,
-                            date: item.Date,
-                            time: item.Time
+                            data: item.data,
+                            //caretakerID: item.CaretakerID,
+                            date: item.date,
+                            //time: item.Time
 
                         });
                         activities.push(activity);

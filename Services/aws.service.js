@@ -7,8 +7,39 @@ angular.module("app").service("AWSService", function () {
             this.cognito = new AWS.CognitoIdentityServiceProvider();
             this.previousTimestamp = null;
 
-            // this.signup('dz_ludcas', 'myPassword1234%', 'dzlucasdz@gmail.com');
-            //  this.login('dz_lucas', 'myPassword1234%');
+            var config = {
+                apiKey: "AIzaSyALjVa5DXtXiZFhSHddwO-8_wVx7JyUuEQ",
+                authDomain: "project-independence-1909b.firebaseapp.com",
+                databaseURL: "https://project-independence-1909b.firebaseio.com",
+                projectId: "project-independence-1909b",
+                storageBucket: "project-independence-1909b.appspot.com",
+                messagingSenderId: "425223397877"
+            };
+            firebase.initializeApp(config);
+            const messaging = firebase.messaging();
+            messaging.requestPermission()
+                .then(function () {
+                    console.log("got permission");
+                    return messaging.getToken();
+                })
+                .then(function (token) {
+                    console.log(token);
+                })
+                .catch(function (err) {
+                    console.log("error occured");
+                });
+
+            messaging.onMessage(function (payload) {
+                console.log(payload);
+            });
+
+
+
+
+
+
+
+
         }
         initAWS() {
             AWS.config.update({
@@ -170,6 +201,26 @@ angular.module("app").service("AWSService", function () {
                     },
                 },
                 TableName: 'Shopping'
+            }
+            this.documentClient.update(params, function (err, data) {});
+        }
+
+        logActivity(activity) {
+            var params = {
+                Key: {
+                    ActivityID: activity.id
+                },
+                AttributeUpdates: {
+                    data: {
+                        Action: 'PUT',
+                        Value: activity.data
+                    },
+                    date: {
+                        Action: 'PUT',
+                        Value: activity.date
+                    },
+                },
+                TableName: 'Activity'
             }
             this.documentClient.update(params, function (err, data) {});
         }

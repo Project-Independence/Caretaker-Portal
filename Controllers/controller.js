@@ -1,4 +1,4 @@
-angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, $window, $scope) {
+angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, $window, $scope, $http) {
     class MainController {
         constructor() {
             this.AWSService = AWSService;

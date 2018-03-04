@@ -2,16 +2,16 @@ angular.module("app").factory("Activity", function (AWSService) {
     class Activity {
         constructor(descriptor) {
             Object.assign(this, {
-                id: '',
-                data: {},
+                id: descriptor.id,
+                data: descriptor.data,
                 caretakerID: 0,
-                date: '',
+                date: descriptor.date,
                 time: ''
             }, descriptor);
         }
 
-        log() {
-
+        logActivity() {
+            AWSService.logActivity(this);
         }
     }
 

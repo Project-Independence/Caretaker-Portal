@@ -8,13 +8,17 @@
         }
 
     </style>
-
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-messaging.js"></script>
     <script src="/node_modules/amazon-cognito-identity-js/dist/aws-cognito-sdk.js"></script>
     <script src="/node_modules/amazon-cognito-identity-js/dist/amazon-cognito-identity.js"></script>
     <script src="/node_modules/aws-sdk/dist/aws-sdk.js"></script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
@@ -27,7 +31,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 
     <script src="app.js"></script>
-
     <!-----------------  Styles -------------------->
     <link rel="stylesheet" type="text/css" href="Styles/styles.css">
     <link rel="stylesheet" type="text/css" href="Styles/activity-feed.css">
@@ -40,6 +43,8 @@
     <!-----------------  Services  ------------------->
     <script src="Services/aws.service.js"></script>
     <script src="Services/senior-data.service.js"></script>
+    <script src="Services/firebase.service.js"></script>
+    <script src="Services/notifications.service.js"></script>
 
     <!-----------------  Controllers  ------------------->
     <script src="Controllers/controller.js"></script>
@@ -79,18 +84,28 @@
                 <i class="material-icons">home</i>
             </md-tab-label>
             <md-tab-body>
+                <div class="activity-feed">
+                    <div ng-repeat="item in vm.seniorDataService.activities">
+                        <div class="feed-item">
+                            <div class="date">{{item.date}}</div>
+                            <div class="text">{{item.data}}</div>
+                        </div>
+                    </div>
+                </div>
+                <!--
                 <div ng-repeat="item in vm.test">
                     {{item}}
                 </div>
+
                 <div class="activity-feed">
                     <div class="feed-item">
                         <div class="date">About an hour ago</div>
-                        <div class="text"><a href="single-need.php">Greg</a> claimed a <a href="single-need.php">ride</a></div>
+                        <div class="text"><a href="single-need.php">Greg</a> claimed a <a href="single-need.php">ride</a> for "Doctor's Appointment" at 8:30am tomorrow for Edgar.</div>
                     </div>
 
                     <div class="feed-item">
                         <div class="date">3 hours ago</div>
-                        <div class="text"><a href="single-need.php">Susie</a> picked up tomatoes
+                        <div class="text"><a href="single-need.php">Susie</a> picked up tomatoes and oranges for Edgar.
                         </div>
                     </div>
 
@@ -122,6 +137,7 @@
                         <div class="text"><a href="single-need.php">Bertha</a> requested a <a href="single-need.php">ride</a></div>
                     </div>
                 </div>
+-->
             </md-tab-body>
         </md-tab>
         <!------------------------  ------------------------------------------------>
