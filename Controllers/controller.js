@@ -1,6 +1,11 @@
 angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, $window, $scope, $http) {
     class MainController {
         constructor() {
+            this.username = '';
+            this.password = '';
+            this.confirmPassword = '';
+            this.showLogin = false;
+            this.loginMode = 0;
             this.AWSService = AWSService;
             this.seniorDataService = SeniorDataService;
             this.sns = new AWS.SNS();
@@ -11,6 +16,19 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
                     SeniorDataService.changePending = false;
                 }
             }, 500);
+        }
+
+        login() {
+            //    $window.location.href = '/index.html';
+            AWSService.login(this.username, this.password, (success) => {
+                if (success) {
+                    this.showLogin = false;
+                    $scope.$apply();
+                    console.log("success");
+                } else {
+                    console.log("failure");
+                }
+            });
         }
 
         sendEmail(subject, body) {

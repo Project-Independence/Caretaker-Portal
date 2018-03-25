@@ -1,4 +1,4 @@
-angular.module("app").factory("Activity", function (AWSService) {
+angular.module("app").factory("Activity", function (AWSService, UserDataService) {
     class Activity {
         constructor(descriptor) {
             Object.assign(this, {
@@ -6,7 +6,8 @@ angular.module("app").factory("Activity", function (AWSService) {
                 data: descriptor.data,
                 caretakerID: 0,
                 date: descriptor.date,
-                time: ''
+                time: '',
+                caretakerName: UserDataService.name
             }, descriptor);
         }
 

@@ -1,16 +1,18 @@
-angular.module("app").controller("LoginController", function ($window, AWSService) {
+angular.module("app").controller("LoginController", function ($window, $scope, AWSService) {
     class LoginController {
         constructor() {
             this.username = '';
             this.password = '';
+            this.showLogin = true;
         }
 
         login() {
             //    $window.location.href = '/index.html';
             AWSService.login(this.username, this.password, (success) => {
                 if (success) {
+                    this.showLogin = false;
+                    $scope.$apply();
                     console.log("success");
-                    $window.location.href = '/index.html';
                 } else {
                     console.log("failure");
                 }

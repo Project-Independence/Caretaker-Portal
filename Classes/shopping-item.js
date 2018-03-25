@@ -1,4 +1,4 @@
-angular.module("app").factory("ShoppingItem", function (AWSService, Activity) {
+angular.module("app").factory("ShoppingItem", function (AWSService, Activity, UserDataService) {
     class ShoppingItem {
         constructor(descriptor) {
             this.timestamp = descriptor.timestamp;
@@ -13,7 +13,7 @@ angular.module("app").factory("ShoppingItem", function (AWSService, Activity) {
             var activityData;
             var d = new Date();
             if (pickedUp) {
-                activityData = "Caretaker picked up an item."
+                activityData = UserDataService.name + " picked up an item."
                 let activity = new Activity({
                     id: Date.now(),
                     data: activityData,

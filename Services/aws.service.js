@@ -34,12 +34,6 @@ angular.module("app").service("AWSService", function () {
             });
 
 
-
-
-
-
-
-
         }
         initAWS() {
             AWS.config.update({
@@ -88,19 +82,23 @@ angular.module("app").service("AWSService", function () {
                 Pool: this.userPool
             };
             var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
-            cognitoUser.authenticateUser(authenticationDetails, {
-                onSuccess: function (result) {
+            this.user = cognitoUser;
+            let _this = this;
+            this.user.authenticateUser(authenticationDetails, {
+                onSuccess: (result) => {
+                    this.addUserAttribute('name', 'Lucas');
                     callbackFn(true);
                     //console.log('access token + ' + result.getAccessToken().getJwtToken());
                     //console.log('idToken + ' + result.idToken.jwtToken);
                 },
 
-                onFailure: function (err) {
+                onFailure: (err) => {
                     callbackFn(false);
                     alert(err);
                 },
                 newPasswordRequired: function () {
-                    cognitoUser.changePassword('!Guitar648', '?Guitar648', function (err, result) {
+                    console.log("new pass");
+                    _this.user.changePassword('!Guitar648', '?Guitar648', function (err, result) {
                         if (err) {
                             alert(err);
                             return;
@@ -111,6 +109,25 @@ angular.module("app").service("AWSService", function () {
 
             });
 
+        }
+
+        addUserAttribute(field, value) {
+            console.log("adding attribute");
+            var attributeList = [];
+            var attribute = {
+                Name: field,
+                Value: value
+            };
+            var attribute = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserAttribute(attribute);
+            attributeList.push(attribute);
+
+            this.user.updateAttributes(attributeList, function (err, result) {
+                if (err) {
+                    alert(err);
+                    return;
+                }
+                console.log('call result: ' + result);
+            });
         }
 
         getRideRequests(callbackFn) {

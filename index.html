@@ -29,11 +29,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/png" href="Assets/icons/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="Assets/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="Assets/Linearicons-Free-v1.0.0/icon-font.min.css">
 
     <script src="app.js"></script>
     <!-----------------  Styles -------------------->
     <link rel="stylesheet" type="text/css" href="Styles/styles.css">
     <link rel="stylesheet" type="text/css" href="Styles/activity-feed.css">
+    <link rel="stylesheet" type="text/css" href="Styles/login-screen.css">
+    <link rel="stylesheet" type="text/css" href="Styles/util.css">
     <!-----------------  Classes  ------------------->
     <script src="Classes/ride-request.js"></script>
     <script src="Classes/shopping-list.js"></script>
@@ -45,54 +53,109 @@
     <script src="Services/senior-data.service.js"></script>
     <script src="Services/firebase.service.js"></script>
     <script src="Services/notifications.service.js"></script>
+    <script src="Services/user-data.service.js"></script>
 
     <!-----------------  Controllers  ------------------->
     <script src="Controllers/controller.js"></script>
+    <script src="Controllers/login.controller.js"></script>
 </head>
 
 <body ng-app="app" ng-controller="MainController as vm">
-    <md-toolbar md-scroll-shrink>
-        <div class="md-toolbar-tools" style="background: #004986" layout="row">
-            <div layout="row" style="width: 100%" layout-align="start center">
-                <div class="avatar" ng-click="vm.toggleSidebar()">
-                    <img src="assets/pro-pic.jpeg">
-                    <div class="hover">
+    <div ng-show="vm.showLogin" class="container-login100" style="background-image: url('Assets/bg-01.jpg');">
+        <div class="wrap-login100 p-t-30 p-b-50">
+
+            <!--
+            <span ng-show="vm.loginMode == 0" class="login100-form-title p-b-41">
+					Portal Login
+				</span>
+            <span ng-show="vm.loginMode == 1" class="login100-form-title p-b-41">
+					Signup
+				</span>
+-->
+
+
+            <div class="login100-form p-b-33 p-t-5">
+                <div ng-show="vm.loginMode == 0">
+                    <div class="wrap-input100 validate-input" data-validate="Enter username">
+                        <input class="input100" type="text" name="username" placeholder="User name" ng-model="vm.username">
+                        <span class="focus-input100" data-placeholder="&#xe82a;"></span>
                     </div>
+                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                        <input class="input100" type="password" name="pass" placeholder="Password" ng-model="vm.password">
+                        <span class="focus-input100" data-placeholder="&#xe80f;"></span>
+                    </div>
+                    <div class="container-login100-form-btn m-t-32">
+                        <button ng-click="vm.login()" class="login100-form-btn">
+							Login
+                        </button>
+                    </div>
+
                 </div>
-                <div layout="row" layout-align="start center">
-                    <div>{{vm.currentView}}</div>
+                <div ng-show="vm.loginMode == 1">
+                    <div class="wrap-input100 validate-input" data-validate="Enter username">
+                        <input class="input100" type="text" name="username" placeholder="User name" ng-model="vm.username">
+                        <span class="focus-input100" data-placeholder="&#xe82a;"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                        <input class="input100" type="password" name="pass" placeholder="Password" ng-model="vm.password">
+                        <span class="focus-input100" data-placeholder="&#xe80f;"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate="Re-enter password">
+                        <input class="input100" type="password" name="re-pass" placeholder="Re-enter Password" ng-model="vm.confirmPassword">
+                        <span class="focus-input100" data-placeholder="&#xe80f;"></span>
+                    </div>
+                    <div class="container-login100-form-btn m-t-32">
+                        <button ng-click="vm.login()" class="login100-form-btn">
+							Signup
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </md-toolbar>
+    </div>
 
-
-
-    <md-sidenav class="md-sidenav-left" md-component-id="sidenav" md-disable-backdrop md-whiteframe="4">
-        <div layout="column" layout-align="center center" style="width=100%; height=100%">
-            <div class="pro-pic">
-                <img src="assets/pro-pic.jpeg">
-            </div>
-        </div>
-    </md-sidenav>
-
-
-    <md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always">
-        <!------------------------  ------------------------------------------------>
-        <md-tab md-on-select="vm.selectView('Home')">
-            <md-tab-label>
-                <i class="material-icons">home</i>
-            </md-tab-label>
-            <md-tab-body>
-                <div class="activity-feed">
-                    <div ng-repeat="item in vm.seniorDataService.activities">
-                        <div class="feed-item">
-                            <div class="date">{{item.date}}</div>
-                            <div class="text">{{item.data}}</div>
+    <div ng-hide="vm.showLogin">
+        <div id="dropDownSelect1"></div>
+        <md-toolbar md-scroll-shrink>
+            <div class="md-toolbar-tools" style="background: #004986" layout="row">
+                <div layout="row" style="width: 100%" layout-align="start center">
+                    <div class="avatar" ng-click="vm.toggleSidebar()">
+                        <img src="assets/pro-pic.jpeg">
+                        <div class="hover">
                         </div>
                     </div>
+                    <div layout="row" layout-align="start center">
+                        <div>{{vm.currentView}}</div>
+                    </div>
                 </div>
-                <!--
+            </div>
+        </md-toolbar>
+        <md-sidenav class="md-sidenav-left" md-component-id="sidenav" md-disable-backdrop md-whiteframe="4">
+            <div layout="column" layout-align="center center" style="width=100%; height=100%">
+                <div class="pro-pic">
+                    <img src="assets/pro-pic.jpeg">
+                </div>
+            </div>
+        </md-sidenav>
+
+
+        <md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always">
+            <!------------------------  ------------------------------------------------>
+            <md-tab md-on-select="vm.selectView('Home')">
+                <md-tab-label>
+                    <i class="material-icons">home</i>
+                </md-tab-label>
+                <md-tab-body>
+                    <div class="activity-feed">
+                        <div ng-repeat="item in vm.seniorDataService.activities">
+                            <div class="feed-item">
+                                <div class="date">{{item.date}}</div>
+                                <div class="text">{{item.data}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--
                 <div ng-repeat="item in vm.test">
                     {{item}}
                 </div>
@@ -138,73 +201,74 @@
                     </div>
                 </div>
 -->
-            </md-tab-body>
-        </md-tab>
-        <!------------------------  ------------------------------------------------>
-        <md-tab md-on-select="vm.selectView('Rides')">
-            <md-tab-label>
-                <i class="material-icons">directions_car</i>
-            </md-tab-label>
-            <md-tab-body>
-                <div layout="row" class="event" style="height: 30px; background: #dddddd">
-                    <div class="date" style="border: none">
-                        Time</div>
-                    <div class="date" style="border: none">Destination</div>
-                    <div class="date" layout="row" style="width:100%; padding-right: 10px; border: none" layout-align="end center">
-                        Claim
-                    </div>
-                </div>
-                <div ng-repeat="element in vm.seniorDataService.rideRequests">
-                    <div layout="row" class="event">
-                        <div class="date">
-                            {{element.date}} at {{element.time}}</div>
-                        <div class="description">{{element.event}}</div>
-                        <div layout="row" style="width:100%" layout-align="end center">
-                            <md-switch ng-model="element.claimed" aria-label="Disabled" ng-change="element.toggleClaim(element.claimed)" style="margin: 0px; transform: scale(1.5); padding-right: 10px" md-no-ink ng-model="hasInk">
-                            </md-switch>
+                </md-tab-body>
+            </md-tab>
+            <!------------------------  ------------------------------------------------>
+            <md-tab md-on-select="vm.selectView('Rides')">
+                <md-tab-label>
+                    <i class="material-icons">directions_car</i>
+                </md-tab-label>
+                <md-tab-body>
+                    <div layout="row" class="event" style="height: 30px; background: #dddddd">
+                        <div class="date" style="border: none">
+                            Time</div>
+                        <div class="date" style="border: none">Destination</div>
+                        <div class="date" layout="row" style="width:100%; padding-right: 10px; border: none" layout-align="end center">
+                            Claim
                         </div>
                     </div>
-                </div>
-            </md-tab-body>
-        </md-tab>
-        <!------------------------------------------------------------------------>
-        <md-tab md-on-select="vm.selectView('Shopping')">
-            <md-tab-label>
-                <i class="material-icons">shopping_cart</i>
-            </md-tab-label>
-            <md-tab-body>
-                <div layout="row" class="shopping-item" style="height: 30px; background: #dddddd">
-                    <div class="shopping-item-quantity" style="border: none">
-                        #</div>
-                    <div class="shopping-item-quantity" style="border: none">Item</div>
-                </div>
-                <div ng-repeat="item in vm.seniorDataService.shoppingList.list">
-                    <div layout="row " layout-align="start center " class="shopping-item ">
-                        <div class="shopping-item-quantity ">{{item.quantity}}</div>
-                        <div class="shopping-item-name ">{{item.name}}</div>
+                    <div ng-repeat="element in vm.seniorDataService.rideRequests">
+                        <div layout="row" class="event">
+                            <div class="date">
+                                {{element.date}} at {{element.time}}</div>
+                            <div class="description">{{element.event}}</div>
+                            <div layout="row" style="width:100%" layout-align="end center">
+                                <md-switch ng-model="element.claimed" aria-label="Disabled" ng-change="element.toggleClaim(element.claimed)" style="margin: 0px; transform: scale(1.5); padding-right: 10px" md-no-ink ng-model="hasInk">
+                                </md-switch>
+                            </div>
+                        </div>
+                    </div>
+                </md-tab-body>
+            </md-tab>
+            <!------------------------------------------------------------------------>
+            <md-tab md-on-select="vm.selectView('Shopping')">
+                <md-tab-label>
+                    <i class="material-icons">shopping_cart</i>
+                </md-tab-label>
+                <md-tab-body>
+                    <div layout="row" class="shopping-item" style="height: 30px; background: #dddddd">
+                        <div class="shopping-item-quantity" style="border: none">
+                            #</div>
+                        <div class="shopping-item-quantity" style="border: none">Item</div>
+                    </div>
+                    <div ng-repeat="item in vm.seniorDataService.shoppingList.list">
+                        <div layout="row " layout-align="start center " class="shopping-item ">
+                            <div class="shopping-item-quantity ">{{item.quantity}}</div>
+                            <div class="shopping-item-name ">{{item.name}}</div>
 
-                        <div layout="column " layout-align="center end " style="width: 100% ">
-                            <div layout="row ">
-                                <div layout="row " layout-align="center end ">
-                                    <md-checkbox aria-label="Disabled" ng-model="item.pickedUp" ng-change="item.togglePickup(item.pickedUp)" style="margin: 0px">
-                                    </md-checkbox>
+                            <div layout="column " layout-align="center end " style="width: 100% ">
+                                <div layout="row ">
+                                    <div layout="row " layout-align="center end ">
+                                        <md-checkbox aria-label="Disabled" ng-model="item.pickedUp" ng-change="item.togglePickup(item.pickedUp)" style="margin: 0px">
+                                        </md-checkbox>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </md-tab-body>
-        </md-tab>
-        <!------------------------------------------------------------------------->
-        <md-tab md-on-select="vm.selectView('Messages')">
-            <md-tab-label>
-                <i class="material-icons">message</i>
-            </md-tab-label>
-            <md-tab-body>
-            </md-tab-body>
-        </md-tab>
+                </md-tab-body>
+            </md-tab>
+            <!------------------------------------------------------------------------->
+            <md-tab md-on-select="vm.selectView('Messages')">
+                <md-tab-label>
+                    <i class="material-icons">message</i>
+                </md-tab-label>
+                <md-tab-body>
+                </md-tab-body>
+            </md-tab>
 
-    </md-tabs>
+        </md-tabs>
+    </div>
 </body>
 
 </html>

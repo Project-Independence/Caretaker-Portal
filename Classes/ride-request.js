@@ -1,4 +1,4 @@
-angular.module("app").factory("RideRequest", function (AWSService, Activity) {
+angular.module("app").factory("RideRequest", function (AWSService, Activity, UserDataService) {
     class RideRequest {
         constructor(descriptor) {
             //this.rideID = descriptor.rideID;
@@ -20,9 +20,9 @@ angular.module("app").factory("RideRequest", function (AWSService, Activity) {
             var activityData;
             var d = new Date();
             if (claim) {
-                activityData = "Caretaker claimed a ride."
+                activityData = UserDataService.name + " claimed a ride."
             } else {
-                activityData = "Caretaker unclaimed a ride."
+                activityData = UserDataService.name + " unclaimed a ride."
             }
             let activity = new Activity({
                 id: Date.now(),
