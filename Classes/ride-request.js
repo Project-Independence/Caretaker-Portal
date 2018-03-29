@@ -13,9 +13,12 @@ angular.module("app").factory("RideRequest", function (AWSService, Activity, Use
             this.event = descriptor.event; // deprec
             this.id = descriptor.id; // will be rideID ^
             this.time = descriptor.time; // deprec (to arrival/pickup)
+            this.driverName = descriptor.driverName;
         }
 
         toggleClaim(claim) {
+            this.claimed = claim;
+            if (claim) this.driverName = UserDataService.name;
             AWSService.toggleClaim(this, claim);
             var activityData;
             var d = new Date();

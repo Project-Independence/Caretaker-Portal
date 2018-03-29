@@ -8,6 +8,8 @@
         }
 
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
@@ -42,6 +44,12 @@
     <link rel="stylesheet" type="text/css" href="Styles/activity-feed.css">
     <link rel="stylesheet" type="text/css" href="Styles/login-screen.css">
     <link rel="stylesheet" type="text/css" href="Styles/util.css">
+    <!-- Roboto font embed -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="styles/reset.min.css">
+    <link rel="stylesheet" type="text/css" href="styles/style.css">
     <!-----------------  Classes  ------------------->
     <script src="Classes/ride-request.js"></script>
     <script src="Classes/shopping-list.js"></script>
@@ -54,6 +62,7 @@
     <script src="Services/firebase.service.js"></script>
     <script src="Services/notifications.service.js"></script>
     <script src="Services/user-data.service.js"></script>
+    <script src="Services/list.service.js"></script>
 
     <!-----------------  Controllers  ------------------->
     <script src="Controllers/controller.js"></script>
@@ -61,7 +70,7 @@
 </head>
 
 <body ng-app="app" ng-controller="MainController as vm">
-    <div ng-show="vm.showLogin" class="container-login100" style="background-image: url('Assets/bg-01.jpg');">
+    <div ng-if="vm.showLogin" class="container-login100" style="background-image: url('Assets/bg-01.jpg');">
         <div class="wrap-login100 p-t-30 p-b-50">
 
             <!--
@@ -115,13 +124,13 @@
         </div>
     </div>
 
-    <div ng-hide="vm.showLogin">
+    <div>
         <div id="dropDownSelect1"></div>
         <md-toolbar md-scroll-shrink>
             <div class="md-toolbar-tools" style="background: #004986" layout="row">
                 <div layout="row" style="width: 100%" layout-align="start center">
                     <div class="avatar" ng-click="vm.toggleSidebar()">
-                        <img src="assets/pro-pic.jpeg">
+                        <img src="https://scontent.fijd1-1.fna.fbcdn.net/v/t1.0-9/1621957_10200533117329480_988060193_n.jpg?_nc_cat=0&_nc_eui2=v1%3AAeFGM9_Uy0bXRBPgkJcloYeTruEb_kL7KAmpL29F7rT-VgmDNNIR6iD99qkclHPMuxqI7KaYocCJh48Jt_frl4G4jOUdXnMrWX160texS-48zQ&oh=fa107f9b18c6f2ce6c38f62722895a74&oe=5B272236">
                         <div class="hover">
                         </div>
                     </div>
@@ -141,6 +150,7 @@
 
 
         <md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always">
+
             <!------------------------  ------------------------------------------------>
             <md-tab md-on-select="vm.selectView('Home')">
                 <md-tab-label>
@@ -209,25 +219,36 @@
                     <i class="material-icons">directions_car</i>
                 </md-tab-label>
                 <md-tab-body>
+
                     <div layout="row" class="event" style="height: 30px; background: #dddddd">
                         <div class="date" style="border: none">
-                            Time</div>
-                        <div class="date" style="border: none">Destination</div>
-                        <div class="date" layout="row" style="width:100%; padding-right: 10px; border: none" layout-align="end center">
-                            Claim
+                            Date</div>
+                        <div class="time" style="border: none">
+                            Pickup</div>
+                        <div class="dest" style="border: none">Destination</div>
+                        <div class="date" layout="row" style="width:100%; padding-right: 0px; border: none" layout-align="end center">
+                            Claimed
                         </div>
                     </div>
-                    <div ng-repeat="element in vm.seniorDataService.rideRequests">
-                        <div layout="row" class="event">
-                            <div class="date">
-                                {{element.date}} at {{element.time}}</div>
-                            <div class="description">{{element.event}}</div>
-                            <div layout="row" style="width:100%" layout-align="end center">
-                                <md-switch ng-model="element.claimed" aria-label="Disabled" ng-change="element.toggleClaim(element.claimed)" style="margin: 0px; transform: scale(1.5); padding-right: 10px" md-no-ink ng-model="hasInk">
-                                </md-switch>
-                            </div>
-                        </div>
+                    <!--
+                    <header layout="row">
+                        <button style="padding 0px" id="add_ride">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/you havesvg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve"><g><path class="fill" d="M16,8c0,0.5-0.5,1-1,1H9v6c0,0.5-0.5,1-1,1s-1-0.5-1-1V9H1C0.5,9,0,8.5,0,8s0.5-1,1-1h6V1c0-0.5,0.5-1,1-1s1,0.5,1,1v6h6C15.5,7,16,7.5,16,8z"/></g></svg>
+			</button>
+                        <input type="text" placeholder="Enter an ride.." id="ride">
+                    </header>
+-->
+
+                    <div class="container">
+                        <!-- Uncompleted tasks -->
+                        <ul class="todo" id="rides"></ul>
+
+                        <!-- Completed tasks -->
+                        <ul class="todo" id="claimed">
+                        </ul>
                     </div>
+
+                    <!-- JavaScripts -->
                 </md-tab-body>
             </md-tab>
             <!------------------------------------------------------------------------>
@@ -236,26 +257,26 @@
                     <i class="material-icons">shopping_cart</i>
                 </md-tab-label>
                 <md-tab-body>
-                    <div layout="row" class="shopping-item" style="height: 30px; background: #dddddd">
-                        <div class="shopping-item-quantity" style="border: none">
-                            #</div>
-                        <div class="shopping-item-quantity" style="border: none">Item</div>
-                    </div>
-                    <div ng-repeat="item in vm.seniorDataService.shoppingList.list">
-                        <div layout="row " layout-align="start center " class="shopping-item ">
-                            <div class="shopping-item-quantity ">{{item.quantity}}</div>
-                            <div class="shopping-item-name ">{{item.name}}</div>
 
-                            <div layout="column " layout-align="center end " style="width: 100% ">
-                                <div layout="row ">
-                                    <div layout="row " layout-align="center end ">
-                                        <md-checkbox aria-label="Disabled" ng-model="item.pickedUp" ng-change="item.togglePickup(item.pickedUp)" style="margin: 0px">
-                                        </md-checkbox>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <header>
+                        <input type="text" placeholder="Enter an item.." id="item">
+                        <button id="add">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/you havesvg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve"><g><path class="fill" d="M16,8c0,0.5-0.5,1-1,1H9v6c0,0.5-0.5,1-1,1s-1-0.5-1-1V9H1C0.5,9,0,8.5,0,8s0.5-1,1-1h6V1c0-0.5,0.5-1,1-1s1,0.5,1,1v6h6C15.5,7,16,7.5,16,8z"/></g></svg>
+			</button>
+                    </header>
+
+                    <div class="container">
+                        <!-- Uncompleted tasks -->
+                        <ul class="todo" id="todo"></ul>
+
+                        <!-- Completed tasks -->
+                        <ul class="todo" id="completed"></ul>
                     </div>
+
+                    <!-- JavaScripts -->
+
+
+
                 </md-tab-body>
             </md-tab>
             <!------------------------------------------------------------------------->

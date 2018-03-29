@@ -1,4 +1,4 @@
-angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, $window, $scope, $http) {
+angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, ListService, $window, $scope, $http) {
     class MainController {
         constructor() {
             this.username = '';
@@ -14,8 +14,18 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
                 if (SeniorDataService.changePending) {
                     $scope.$apply();
                     SeniorDataService.changePending = false;
+                    if (SeniorDataService.rideRequests) {
+                        ListService.loadRides(SeniorDataService.rideRequests);
+                    }
+                    if (SeniorDataService.shoppingList) {
+                        ListService.loadShoppingItems(SeniorDataService.shoppingList.list);
+                    }
                 }
             }, 500);
+
+            angular.element(document).ready(() => {
+                console.log(document.getElementById('todo'))
+            });
         }
 
         login() {

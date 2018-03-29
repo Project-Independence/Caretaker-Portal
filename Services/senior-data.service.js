@@ -1,4 +1,4 @@
-angular.module("app").service("SeniorDataService", function (AWSService, RideRequest, ShoppingList, ShoppingItem, Activity) {
+angular.module("app").service("SeniorDataService", function (AWSService, RideRequest, ShoppingList, ShoppingItem, Activity, ListService, UserDataService) {
     class SeniorDataService {
         constructor() {
             this.shoppingList = {};
@@ -7,15 +7,16 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
             this.init();
             this.changePending = false;
             this.previousTimeStamp = null;
+            this.listService = ListService;
 
-            //            setInterval(() => {
-            //                AWSService.getChangeStatus((data) => {
-            //                    if (data === true) {
-            //                        this.init();
-            //                        this.changePending = true;
-            //                    }
-            //                });
-            //            }, 500)
+            setInterval(() => {
+                AWSService.getChangeStatus((data) => {
+                    if (data === true) {
+                        this.init();
+                        this.changePending = true;
+                    }
+                });
+            }, 500)
         }
 
         init() {
@@ -30,7 +31,8 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
                             date: item.date,
                             event: item.event,
                             id: item.id,
-                            time: item.time
+                            time: item.time,
+                            driverName: item.driverName
                         });
                         requests.push(request);
                     })
@@ -43,6 +45,7 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
                         return 0;
                     });
                     this.rideRequests = requests;
+                    this.listService.loadRides(requests);
                 }
             });
 
@@ -70,6 +73,7 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
                         return 0;
                     });
                     this.shoppingList = shoppingList;
+                    this.listService.loadShoppingItems(shoppingList.list);
                 }
             });
 

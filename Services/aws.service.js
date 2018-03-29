@@ -1,11 +1,14 @@
-angular.module("app").service("AWSService", function () {
+angular.module("app").service("AWSService", function (UserDataService) {
     class AWSService {
         constructor() {
+            console.log("rendering");
             this.initAWS();
             this.documentClient = new AWS.DynamoDB.DocumentClient();
             this.sns = new AWS.SNS();
             this.cognito = new AWS.CognitoIdentityServiceProvider();
             this.previousTimestamp = null;
+            this.userDataService = UserDataService;
+
 
             var config = {
                 apiKey: "AIzaSyALjVa5DXtXiZFhSHddwO-8_wVx7JyUuEQ",
@@ -200,13 +203,18 @@ angular.module("app").service("AWSService", function () {
                         Action: 'PUT',
                         Value: claim
                     },
+                    driverName: {
+                        Action: 'PUT',
+                        Value: claim ? this.userDataService.name : 'N/A'
+                    },
                 },
                 TableName: 'Rides'
             }
             this.documentClient.update(params, function (err, data) {});
         }
 
-        togglePickup(item, pickup) {
+        togglePickup(item, pickedUp) {
+            console.log(item.name + ' now ' + pickedUp);
             var params = {
                 Key: {
                     item: item.name
@@ -214,12 +222,18 @@ angular.module("app").service("AWSService", function () {
                 AttributeUpdates: {
                     done: {
                         Action: 'PUT',
-                        Value: item.pickedUp
+                        Value: pickedUp
+                    },
+                    caretakerName: {
+                        Action: 'PUT',
+                        Value: pickedUp ? this.userDataService.name : 'N/A'
                     },
                 },
                 TableName: 'Shopping'
             }
-            this.documentClient.update(params, function (err, data) {});
+            this.documentClient.update(params, function (err, data) {
+                console.log(data);
+            });
         }
 
         logActivity(activity) {
