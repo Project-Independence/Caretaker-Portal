@@ -11,6 +11,7 @@ angular.module("app").service("ListService", function (ShoppingItem) {
                 document.getElementById('add').addEventListener('click', () => {
                     var value = document.getElementById('item').value;
                     if (value) {
+                        document.getElementById('item').value = '';
                         this.addShoppingItem(value);
                     }
                 });
@@ -19,6 +20,7 @@ angular.module("app").service("ListService", function (ShoppingItem) {
                     var value = this.value;
                     console.log(this.value);
                     if (e.code === 'Enter' && value) {
+                        this.value = '';
                         _this.addShoppingItem(value);
                     }
                 });
