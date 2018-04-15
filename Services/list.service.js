@@ -1,4 +1,4 @@
-angular.module("app").service("ListService", function (ShoppingItem) {
+angular.module("app").service("ListService", function (ShoppingItem, SeniorDataService) {
     class ListService {
         constructor() {
             this.removeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect class="noFill" width="22" height="22"/><g><g><path class="fill" d="M16.1,3.6h-1.9V3.3c0-1.3-1-2.3-2.3-2.3h-1.7C8.9,1,7.8,2,7.8,3.3v0.2H5.9c-1.3,0-2.3,1-2.3,2.3v1.3c0,0.5,0.4,0.9,0.9,1v10.5c0,1.3,1,2.3,2.3,2.3h8.5c1.3,0,2.3-1,2.3-2.3V8.2c0.5-0.1,0.9-0.5,0.9-1V5.9C18.4,4.6,17.4,3.6,16.1,3.6z M9.1,3.3c0-0.6,0.5-1.1,1.1-1.1h1.7c0.6,0,1.1,0.5,1.1,1.1v0.2H9.1V3.3z M16.3,18.7c0,0.6-0.5,1.1-1.1,1.1H6.7c-0.6,0-1.1-0.5-1.1-1.1V8.2h10.6V18.7z M17.2,7H4.8V5.9c0-0.6,0.5-1.1,1.1-1.1h10.2c0.6,0,1.1,0.5,1.1,1.1V7z"/></g><g><g><path class="fill" d="M11,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6s0.6,0.3,0.6,0.6v6.8C11.6,17.7,11.4,18,11,18z"/></g><g><path class="fill" d="M8,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C8.7,17.7,8.4,18,8,18z"/></g><g><path class="fill" d="M14,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C14.6,17.7,14.3,18,14,18z"/></g></g></g></svg>';
@@ -160,31 +160,34 @@ angular.module("app").service("ListService", function (ShoppingItem) {
             var target = (id === 'todo') ? document.getElementById('completed') : document.getElementById('todo');
             var completed = (id == 'todo');
 
-            shoppingItem.togglePickup(completed);
-
-            $(item).animate({
-                opacity: '0',
-                minHeight: '0px',
-                lineHeight: '0px',
-                height: '0px',
-                padding: '0px',
-                fontSize: '0px',
-                margin: '0px'
-
-            }, 100, function () {
-
-                parent.removeChild(item);
-                target.insertBefore(item, target.childNodes[0]);
+            shoppingItem.togglePickup(completed, () => {
+                let _this = this;
                 $(item).animate({
-                    opacity: '1',
-                    minHeight: '50px',
-                    lineHeight: '22px',
-                    padding: '14px 100px 14px 14px',
-                    margin: '0px 0px 4px 0px',
-                    fontSize: '14px',
-                    backgroundColor: id == 'todo' ? '#fbfff9' : '#FFF'
-                }, 100)
-            })
+                    opacity: '0',
+                    minHeight: '0px',
+                    lineHeight: '0px',
+                    height: '0px',
+                    padding: '0px',
+                    fontSize: '0px',
+                    margin: '0px'
+
+                }, 100, function () {
+
+                    parent.removeChild(item);
+                    target.insertBefore(item, target.childNodes[0]);
+                    $(item).animate({
+                        opacity: '1',
+                        minHeight: '50px',
+                        lineHeight: '22px',
+                        padding: '14px 100px 14px 14px',
+                        margin: '0px 0px 4px 0px',
+                        fontSize: '11px',
+                        backgroundColor: id == 'todo' ? '#fbfff9' : '#FFF'
+                    }, 100, function () {
+                        _this.loadShoppingItems(SeniorDataService.shoppingList.list);
+                    })
+                })
+            });
         }
 
         claimRide(element, ride, claimedElement) {
@@ -198,6 +201,7 @@ angular.module("app").service("ListService", function (ShoppingItem) {
 
             ride.toggleClaim(claimed)
 
+            let _this = this;
             $(item).animate({
                 opacity: '0',
                 minHeight: '0px',
@@ -213,15 +217,18 @@ angular.module("app").service("ListService", function (ShoppingItem) {
                 claimedElement.innerText = claimed ? ride.driverName : '';
                 parent.removeChild(item);
                 target.insertBefore(item, target.childNodes[0]);
+                console.log($(window).width() - 267);
                 $(item).animate({
                     opacity: '1',
                     minHeight: '50px',
                     lineHeight: '22px',
                     padding: '14px 100px 14px 14px',
                     margin: '0px 0px 4px 0px',
-                    fontSize: '14px',
+                    fontSize: '11px',
                     backgroundColor: id == 'rides' ? '#fbfff9' : '#FFF'
-                }, 100)
+                }, 100, function () {
+                    _this.loadRides(SeniorDataService.rideRequests);
+                })
             })
         }
 
@@ -288,21 +295,26 @@ angular.module("app").service("ListService", function (ShoppingItem) {
             var text = document.createElement('div');
 
             var dateText = document.createElement('div');
-            dateText.style.width = '100';
+            dateText.style.width = '70';
             dateText.innerText = ride.date;
 
             var pickupTime = document.createElement('div');
             pickupTime.style.width = '100';
             pickupTime.innerText = ride.time;
             pickupTime.style.position = 'absolute';
-            pickupTime.style.left = '135';
+            pickupTime.style.left = '85';
             pickupTime.style.top = '14';
 
             var event = document.createElement('div');
-            event.style.width = '250';
+            event.style.width = ride.claimed ? 'calc(100% - 267px)' : 'calc(100% - 233px)';
+            event.style.height = '22px';
+            event.style["text-overflow"] = 'ellipsis';
+            event.style["display"] = 'block';
+            event.style["white-space"] = 'nowrap';
+            event.style["overflow"] = 'hidden';
             event.innerText = ride.event;
             event.style.position = 'absolute';
-            event.style.left = '260';
+            event.style.left = '162';
             event.style.top = '14';
 
             var buttons = document.createElement('div');

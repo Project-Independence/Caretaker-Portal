@@ -1,10 +1,10 @@
-angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, ListService, $window, $scope, $http) {
+angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, ListService, MessagingService, $window, $scope, $http) {
     class MainController {
         constructor() {
             this.username = '';
             this.password = '';
             this.confirmPassword = '';
-            this.showLogin = false;
+            this.showLogin = true;
             this.loginMode = 0;
             this.AWSService = AWSService;
             this.seniorDataService = SeniorDataService;
@@ -20,6 +20,9 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
                     if (SeniorDataService.shoppingList) {
                         ListService.loadShoppingItems(SeniorDataService.shoppingList.list);
                     }
+
+
+                    MessagingService.refreshMessages();
                 }
             }, 500);
 

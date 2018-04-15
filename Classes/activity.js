@@ -7,7 +7,8 @@ angular.module("app").factory("Activity", function (AWSService, UserDataService)
                 caretakerID: 0,
                 date: descriptor.date,
                 time: '',
-                caretakerName: UserDataService.name
+                caretakerName: UserDataService.name,
+                type: ''
             }, descriptor);
         }
 

@@ -2,6 +2,7 @@ angular.module("app").service("UserDataService", function () {
     class UserDataService {
         constructor() {
             this.name = 'Lucas';
+            this.UserID = 4;
 
         }
 

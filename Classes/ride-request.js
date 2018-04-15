@@ -1,4 +1,4 @@
-angular.module("app").factory("RideRequest", function (AWSService, Activity, UserDataService) {
+angular.module(`app`).factory(`RideRequest`, function (AWSService, Activity, UserDataService) {
     class RideRequest {
         constructor(descriptor) {
             //this.rideID = descriptor.rideID;
@@ -23,14 +23,15 @@ angular.module("app").factory("RideRequest", function (AWSService, Activity, Use
             var activityData;
             var d = new Date();
             if (claim) {
-                activityData = UserDataService.name + " claimed a ride."
+                activityData = UserDataService.name + ` claimed Bertha's ride to "` + this.event + `" for ` + this.date + ` at ` + this.time + `.`
             } else {
-                activityData = UserDataService.name + " unclaimed a ride."
+                activityData = UserDataService.name + ` unclaimed Bertha's ride to "` + this.event + `" for ` + this.date + ` at ` + this.time + `.`
             }
             let activity = new Activity({
                 id: Date.now(),
                 data: activityData,
-                date: d.toDateString()
+                date: d.toDateString(),
+                type: claim ? 'ride-claim' : 'ride-unclaim'
             });
             activity.logActivity();
         }

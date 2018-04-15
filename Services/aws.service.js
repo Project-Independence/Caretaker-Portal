@@ -85,11 +85,9 @@ angular.module("app").service("AWSService", function (UserDataService) {
                 Pool: this.userPool
             };
             var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
-            this.user = cognitoUser;
-            let _this = this;
-            this.user.authenticateUser(authenticationDetails, {
+            cognitoUser.authenticateUser(authenticationDetails, {
                 onSuccess: (result) => {
-                    this.addUserAttribute('name', 'Lucas');
+                    //this.addUserAttribute('name', 'Lucas');
                     callbackFn(true);
                     //console.log('access token + ' + result.getAccessToken().getJwtToken());
                     //console.log('idToken + ' + result.idToken.jwtToken);
@@ -101,7 +99,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
                 },
                 newPasswordRequired: function () {
                     console.log("new pass");
-                    _this.user.changePassword('!Guitar648', '?Guitar648', function (err, result) {
+                    cognitoUser.changePassword('Guitar648', '!Guitar648', function (err, result) {
                         if (err) {
                             alert(err);
                             return;
@@ -136,6 +134,19 @@ angular.module("app").service("AWSService", function (UserDataService) {
         getRideRequests(callbackFn) {
             let params = {
                 TableName: 'Rides'
+            };
+            this.documentClient.scan(params, (err, data) => {
+                if (err) {
+                    callbackFn(err, null);
+                } else {
+                    callbackFn(err, data.Items);
+                }
+            });
+        }
+
+        getMessages(callbackFn) {
+            let params = {
+                TableName: 'Message'
             };
             this.documentClient.scan(params, (err, data) => {
                 if (err) {
@@ -213,7 +224,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             this.documentClient.update(params, function (err, data) {});
         }
 
-        togglePickup(item, pickedUp) {
+        togglePickup(item, pickedUp, callbackFn) {
             console.log(item.name + ' now ' + pickedUp);
             var params = {
                 Key: {
@@ -232,7 +243,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
                 TableName: 'Shopping'
             }
             this.documentClient.update(params, function (err, data) {
-                console.log(data);
+                callbackFn(data);
             });
         }
 
@@ -246,14 +257,49 @@ angular.module("app").service("AWSService", function (UserDataService) {
                         Action: 'PUT',
                         Value: activity.data
                     },
-                    date: {
+                    timestamp: {
                         Action: 'PUT',
-                        Value: activity.date
+                        Value: Date.now()
                     },
+                    type: {
+                        Action: 'PUT',
+                        Value: activity.type
+                    }
                 },
                 TableName: 'Activity'
             }
             this.documentClient.update(params, function (err, data) {});
+        }
+
+        sendMessage(message, callbackFn) {
+            var params = {
+                Key: {
+                    MessageID: Date.now().toString()
+                },
+                AttributeUpdates: {
+                    timestamp: {
+                        Action: 'PUT',
+                        Value: Date.now()
+                    },
+                    UserID: {
+                        Action: 'PUT',
+                        Value: 1
+                    },
+                    Message: {
+                        Action: 'PUT',
+                        Value: message
+                    },
+                    CaretakerID: {
+                        Action: 'PUT',
+                        Value: UserDataService.UserID
+                    }
+
+                },
+                TableName: 'Message'
+            }
+            this.documentClient.update(params, function (err, data) {
+                callbackFn(err, data);
+            });
         }
 
         getChangeStatus(callbackFn) {
