@@ -29,9 +29,16 @@ angular.module(`app`).factory(`RideRequest`, function (AWSService, Activity, Use
             }
             let activity = new Activity({
                 id: Date.now(),
-                data: activityData,
+                logString: activityData,
                 date: d.toDateString(),
-                type: claim ? 'ride-claim' : 'ride-unclaim'
+                type: claim ? 'ride-claim' : 'ride-unclaim',
+                data: {
+                    type: claim ? 'ride-claim' : 'ride-unclaim',
+                    name: this.event,
+                    pickupTime: this.time,
+                    CaretakerName: UserDataService.name,
+                    CaretakerID: UserDataService.UserID
+                }
             });
             activity.logActivity();
         }

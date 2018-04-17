@@ -8,7 +8,8 @@ angular.module("app").factory("Activity", function (AWSService, UserDataService)
                 date: descriptor.date,
                 time: '',
                 caretakerName: UserDataService.name,
-                type: ''
+                type: '',
+                logString: ''
             }, descriptor);
         }
 

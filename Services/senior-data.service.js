@@ -74,7 +74,7 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
                 }
             });
 
-            let days = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat']
+            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
             function format_time(date_obj) {
                 // formats a javascript Date object into a 12h AM/PM time string
@@ -97,7 +97,7 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
                 } else if (data) {
                     let activities = [];
                     data.forEach((item) => {
-
+                        console.log(item);
                         let timestamp = item.timestamp;
                         let dateObj = new Date(timestamp);
                         let dayStr = days[dateObj.getDay()];
@@ -109,7 +109,8 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
                             data: item.data,
                             //caretakerID: item.CaretakerID,
                             date: finalStr,
-                            timestamp: item.timestamp
+                            timestamp: item.timestamp,
+                            logString: item.logString
 
                         });
                         activities.push(activity);

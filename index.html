@@ -170,7 +170,7 @@
                     <div class="activity-feed">
                         <div ng-repeat="item in vm.seniorDataService.activities" ng-class="{'feed-item': !$last, 'last-feed-item': $last}">
                             <div class="date">{{item.date}}</div>
-                            <div class="text">{{item.data}}</div>
+                            <div class="text">{{item.logString}}</div>
                         </div>
                     </div>
 

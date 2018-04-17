@@ -264,6 +264,10 @@ angular.module("app").service("AWSService", function (UserDataService) {
                     type: {
                         Action: 'PUT',
                         Value: activity.type
+                    },
+                    logString: {
+                        Action: 'PUT',
+                        Value: activity.logString
                     }
                 },
                 TableName: 'Activity'

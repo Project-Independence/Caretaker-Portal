@@ -18,9 +18,16 @@ angular.module("app").factory("ShoppingItem", function (AWSService, Activity, Us
                 activityData = UserDataService.name + " picked up " + this.name + " for Bertha."
                 let activity = new Activity({
                     id: Date.now(),
-                    data: activityData,
+                    logString: activityData,
                     date: d.toDateString(),
-                    type: 'shopping-pickup'
+                    type: 'shopping-pickup',
+                    data: {
+                        type: 'shopping-pickup',
+                        name: this.name,
+                        CaretakerName: UserDataService.name,
+                        CaretakerID: UserDataService.UserID
+                    }
+
                 });
                 activity.logActivity();
             }
