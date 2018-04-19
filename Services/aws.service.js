@@ -10,6 +10,12 @@ angular.module("app").service("AWSService", function (UserDataService) {
             this.userDataService = UserDataService;
 
 
+
+
+
+        }
+
+        getFirebaseToken() {
             var config = {
                 apiKey: "AIzaSyALjVa5DXtXiZFhSHddwO-8_wVx7JyUuEQ",
                 authDomain: "project-independence-1909b.firebaseapp.com",
@@ -20,13 +26,16 @@ angular.module("app").service("AWSService", function (UserDataService) {
             };
             firebase.initializeApp(config);
             const messaging = firebase.messaging();
+            let _this = this;
             messaging.requestPermission()
                 .then(function () {
                     console.log("got permission");
                     return messaging.getToken();
                 })
                 .then(function (token) {
+                    _this.storeToken(token);
                     console.log(token);
+
                 })
                 .catch(function (err) {
                     console.log("error occured");
@@ -35,9 +44,24 @@ angular.module("app").service("AWSService", function (UserDataService) {
             messaging.onMessage(function (payload) {
                 console.log(payload);
             });
-
-
         }
+
+        storeToken(token) {
+            var params = {
+                Key: {
+                    UserID: UserDataService.UserID
+                },
+                AttributeUpdates: {
+                    FirebaseToken: {
+                        Action: 'PUT',
+                        Value: token
+                    },
+                },
+                TableName: 'Caretaker'
+            }
+            this.documentClient.update(params, function (err, data) {});
+        }
+
         initAWS() {
             AWS.config.update({
                 region: 'us-east-1'
@@ -221,7 +245,9 @@ angular.module("app").service("AWSService", function (UserDataService) {
                 },
                 TableName: 'Rides'
             }
-            this.documentClient.update(params, function (err, data) {});
+            this.documentClient.update(params, (err, data) => {
+                this.recordChange();
+            });
         }
 
         togglePickup(item, pickedUp, callbackFn) {
@@ -242,7 +268,8 @@ angular.module("app").service("AWSService", function (UserDataService) {
                 },
                 TableName: 'Shopping'
             }
-            this.documentClient.update(params, function (err, data) {
+            this.documentClient.update(params, (err, data) => {
+                this.recordChange();
                 callbackFn(data);
             });
         }
@@ -296,6 +323,10 @@ angular.module("app").service("AWSService", function (UserDataService) {
                     CaretakerID: {
                         Action: 'PUT',
                         Value: UserDataService.UserID
+                    },
+                    CaretakerName: {
+                        Action: 'PUT',
+                        Value: UserDataService.name
                     }
 
                 },

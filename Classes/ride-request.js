@@ -14,6 +14,7 @@ angular.module(`app`).factory(`RideRequest`, function (AWSService, Activity, Use
             this.id = descriptor.id; // will be rideID ^
             this.time = descriptor.time; // deprec (to arrival/pickup)
             this.driverName = descriptor.driverName;
+            this.timestamp = descriptor.timestamp;
         }
 
         toggleClaim(claim) {
@@ -37,7 +38,8 @@ angular.module(`app`).factory(`RideRequest`, function (AWSService, Activity, Use
                     name: this.event,
                     pickupTime: this.time,
                     CaretakerName: UserDataService.name,
-                    CaretakerID: UserDataService.UserID
+                    CaretakerID: UserDataService.UserID,
+                    date: this.date
                 }
             });
             activity.logActivity();

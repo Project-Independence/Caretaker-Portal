@@ -62,7 +62,7 @@ angular.module("app").service("MessagingService", function (AWSService, UserData
                 data.forEach((message) => {
                     if ((message.CaretakerID == UserDataService.UserID || message.CaretakerID == 0) && !message.UserID) {
                         _this.insertChat("you", message.Message, message.timestamp);
-                    } else if (message.UserID) {
+                    } else if (message.UserID && message.CaretakerID == UserDataService.UserID) {
                         _this.insertChat("me", message.Message, message.timestamp);
                     }
                 })

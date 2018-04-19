@@ -75,11 +75,11 @@
 </head>
 
 <body ng-app="app" ng-controller="MainController as vm">
-    <!--
+
     <div ng-if="vm.showLogin" class="container-login100" style="background-image: url('Assets/bg-01.jpg');">
         <div class="wrap-login100 p-t-30 p-b-50">
 
-            
+
             <span ng-show="vm.loginMode == 0" class="login100-form-title p-b-41">
 					Portal Login
 				</span>
@@ -129,15 +129,15 @@
             </div>
         </div>
     </div>
--->
 
-    <main style="height: 100%">
+
+    <main ng-if="!vm.showLogin" style="height: 100%">
         <div id="dropDownSelect1"></div>
         <md-toolbar md-scroll-shrink>
             <div class="md-toolbar-tools" style="background: #004986" layout="row">
                 <div layout="row" style="width: 100%" layout-align="start center">
                     <div class="avatar" ng-click="vm.toggleSidebar()">
-                        <img src="https://scontent.fijd1-1.fna.fbcdn.net/v/t1.0-9/1621957_10200533117329480_988060193_n.jpg?_nc_cat=0&_nc_eui2=v1%3AAeFGM9_Uy0bXRBPgkJcloYeTruEb_kL7KAmpL29F7rT-VgmDNNIR6iD99qkclHPMuxqI7KaYocCJh48Jt_frl4G4jOUdXnMrWX160texS-48zQ&oh=fa107f9b18c6f2ce6c38f62722895a74&oe=5B272236">
+                        <img src="https://scontent.fijd1-1.fna.fbcdn.net/v/t31.0-8/24831324_1878378875523810_381839370215089745_o.jpg?_nc_cat=0&oh=5958fa81643a76425b591ebb63257d38&oe=5B6C44E0">
                         <div class="hover">
                         </div>
                     </div>
