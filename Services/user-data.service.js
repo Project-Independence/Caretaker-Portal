@@ -3,6 +3,7 @@ angular.module("app").service("UserDataService", function () {
         constructor() {
             this.name = 'Lucas';
             this.UserID = 4;
+            this.proPic = '';
         }
     }
     let srv = new UserDataService();

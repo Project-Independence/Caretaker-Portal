@@ -6,7 +6,7 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
             let final = new Date(date.getYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), 0, 0);
             console.log(final);
 
-
+            this.userDataService = UserDataService;
             this.username = '';
             this.password = '';
             this.confirmPassword = '';
@@ -41,12 +41,14 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
                 "ldz": {
                     password: '1234',
                     id: 4,
-                    firstName: 'Lucas'
+                    firstName: 'Lucas',
+                    proPic: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t31.0-8/24831324_1878378875523810_381839370215089745_o.jpg?_nc_cat=0&oh=5958fa81643a76425b591ebb63257d38&oe=5B6C44E0'
                 },
                 "jd.samko": {
                     password: 'Cigna1234',
                     id: 3,
-                    firstName: 'John'
+                    firstName: 'John',
+                    proPic: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t31.0-8/20017560_1427770983986397_2252778320389310674_o.jpg?_nc_cat=0&_nc_eui2=v1%3AAeFJn3f8Zq1dLvChlmFZf_ijcHfKwbABKIsHFL91Y3gtVPwUFCYa9GtMjbt_39WaEsxEX_JFbr-PHULVN-ZIHMPBZTrQcDcNqXLQntmbIj5LGg&oh=ec5fea6060a5641e2dc665333dc35527&oe=5B575DC3'
                 }
             }
         }
@@ -57,6 +59,7 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
                     setTimeout(() => {
                         UserDataService.name = this.loginData[this.username].firstName;
                         UserDataService.UserID = this.loginData[this.username].id;
+                        UserDataService.proPic = this.loginData[this.username].proPic;
                         SeniorDataService.changePending = true;
                         AWSService.getFirebaseToken();
                         this.showLogin = false;

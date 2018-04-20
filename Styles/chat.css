@@ -62,7 +62,7 @@
     background: #e0e0de;
     overflow: hidden;
     padding: 0;
-    height: calc(100vh - 104px);
+    height: calc(100vh - 105px);
 }
 
 .frame > div:last-of-type {

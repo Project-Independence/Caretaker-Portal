@@ -33,7 +33,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
                     return messaging.getToken();
                 })
                 .then(function (token) {
-                    _this.storeToken(token);
+                    //_this.storeToken(token);
                     console.log(token);
 
                 })

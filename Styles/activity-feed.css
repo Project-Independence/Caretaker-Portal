@@ -3,7 +3,7 @@
 
 .activity-feed {
     padding: 15px;
-    height: calc(100vh - 104px);
+    height: calc(100vh - 105px);
     overflow: scroll;
 }
 

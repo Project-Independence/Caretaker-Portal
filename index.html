@@ -131,13 +131,13 @@
     </div>
 
 
-    <main ng-if="!vm.showLogin" style="height: 100%">
+    <main ng-show="!vm.showLogin" style="height: 100%">
         <div id="dropDownSelect1"></div>
         <md-toolbar md-scroll-shrink>
             <div class="md-toolbar-tools" style="background: #004986" layout="row">
                 <div layout="row" style="width: 100%" layout-align="start center">
                     <div class="avatar" ng-click="vm.toggleSidebar()">
-                        <img src="https://scontent.fijd1-1.fna.fbcdn.net/v/t31.0-8/24831324_1878378875523810_381839370215089745_o.jpg?_nc_cat=0&oh=5958fa81643a76425b591ebb63257d38&oe=5B6C44E0">
+                        <img ng-src="{{vm.userDataService.proPic}}">
                         <div class="hover">
                         </div>
                     </div>
@@ -237,9 +237,11 @@
                         <div class="time" style="border: none">
                             Pickup</div>
                         <div class="dest" style="border: none">Destination</div>
+                        <!--
                         <div class="date" layout="row" style="width:100%; padding-right: 0px; border: none">
                             Claimed
                         </div>
+-->
                     </div>
                     <!--
                     <header layout="row">
@@ -250,7 +252,7 @@
                     </header>
 -->
 
-                    <div style="padding: 5px; height: calc(100vh - 134px); overflow: scroll">
+                    <div style="padding: 5px; height: calc(100vh - 135px); overflow: scroll">
                         <!-- Uncompleted tasks -->
                         <ul class="todo" id="rides"></ul>
 
@@ -276,7 +278,7 @@
 			</button>
                     </header>
 
-                    <div style="padding: 5px; height: calc(100vh - 154px); overflow: scroll">
+                    <div style="padding: 5px; height: calc(100vh - 155px); overflow: scroll">
                         <!-- Uncompleted tasks -->
                         <ul class="todo" id="todo"></ul>
 
