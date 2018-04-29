@@ -1,4 +1,6 @@
 angular.module("app").factory("ShoppingItem", function (AWSService, Activity, UserDataService) {
+    // ---ShoppingItem Class---
+    // Object representation of a shopping list item requested by the senior
     class ShoppingItem {
         constructor(descriptor) {
             this.timestamp = descriptor.timestamp;
@@ -8,6 +10,8 @@ angular.module("app").factory("ShoppingItem", function (AWSService, Activity, Us
             this.pickedUp = descriptor.pickedUp;
         }
 
+        // toggle the picked up status of the item for when picked up up
+        // log to database through AWSService
         togglePickup(pickedUp, callbackFn) {
             AWSService.togglePickup(this, pickedUp, () => {
                 callbackFn();

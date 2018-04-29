@@ -1,11 +1,8 @@
 angular.module("app").controller("MainController", function ($mdSidenav, AWSService, $mdDialog, SeniorDataService, UserDataService, ListService, MessagingService, $window, $scope, $http) {
+    // --- View Controller ---
     class MainController {
         constructor() {
-            let date = new Date("January 31 1980 12:30");
-            let time = new Date('March 2, 08 16:20');
-            let final = new Date(date.getYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), 0, 0);
-            console.log(final);
-
+            // init fields, services, current view
             this.userDataService = UserDataService;
             this.username = '';
             this.password = '';
@@ -16,6 +13,9 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
             this.seniorDataService = SeniorDataService;
             this.sns = new AWS.SNS();
             this.currentView = 'Home';
+
+            // Check database for new changes
+            // on change, refresh all lists, feeds, and messages
             setInterval(() => {
                 if (SeniorDataService.changePending) {
                     SeniorDataService.initActivities();
@@ -33,10 +33,6 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
                 }
             }, 500);
 
-            angular.element(document).ready(() => {
-                console.log(document.getElementById('todo'))
-            });
-
             this.loginData = {
                 "ldz": {
                     password: '1234',
@@ -53,6 +49,7 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
             }
         }
 
+        // use the credientials entered to authenticate the user
         login() {
             if (this.loginData[this.username]) {
                 if (this.password == this.loginData[this.username].password) {
@@ -70,34 +67,15 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
             } else {
                 alert("User does not exist.");
             }
-            //    $window.location.href = '/index.html';
-            //            AWSService.login(this.username, this.password, (success) => {
-            //                if (success) {
-            //                    this.showLogin = false;
-            //                    $scope.$apply();
-            //                    console.log("success");
-            //                } else {
-            //                    console.log("failure");
-            //                }
-            //            });
         }
 
-        sendEmail(subject, body) {
-            var params = {
-                Message: body,
-                Subject: subject,
-                TopicArn: 'arn:aws:sns:us-east-1:112632085303:CaretakerPortal'
-            };
-            this.sns.publish(params, function (err, data) {
-                if (err) console.log(err, err.stack); // an error occurred
-                else console.log(data); // successful response
-            });
-        }
-
+        // open / close the profile side bar (no longer in use)
         toggleSidebar() {
             $mdSidenav('sidenav').toggle();
         }
 
+        // select a view by name (home, shopping , rides, messaging)
+        // set as current view for the sidebar title 
         selectView(name) {
             this.currentView = name;
         }

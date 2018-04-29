@@ -7,7 +7,6 @@ angular.module("app").controller("LoginController", function ($window, $scope, A
         }
 
         login() {
-            //    $window.location.href = '/index.html';
             AWSService.login(this.username, this.password, (success) => {
                 if (success) {
                     this.showLogin = false;
