@@ -4,8 +4,8 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
         constructor() {
             // init fields, services, current view
             this.userDataService = UserDataService;
-            this.username = '';
-            this.password = '';
+            this.username = 'ldz';
+            this.password = '1234';
             this.confirmPassword = '';
             this.showLogin = true;
             this.loginMode = 0;
@@ -13,7 +13,6 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
             this.seniorDataService = SeniorDataService;
             this.sns = new AWS.SNS();
             this.currentView = 'Home';
-
             // Check database for new changes
             // on change, refresh all lists, feeds, and messages
             setInterval(() => {
@@ -28,11 +27,13 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
                     }
 
 
+                    this.login();
                     MessagingService.refreshMessages();
                     $scope.$apply();
                 }
             }, 500);
 
+            // mocked up data due to Cognito issues
             this.loginData = {
                 "ldz": {
                     password: '1234',
@@ -50,17 +51,16 @@ angular.module("app").controller("MainController", function ($mdSidenav, AWSServ
         }
 
         // use the credientials entered to authenticate the user
+        // mocked up for demo due to issues with Cognito close to presentation day
         login() {
             if (this.loginData[this.username]) {
                 if (this.password == this.loginData[this.username].password) {
-                    setTimeout(() => {
-                        UserDataService.name = this.loginData[this.username].firstName;
-                        UserDataService.UserID = this.loginData[this.username].id;
-                        UserDataService.proPic = this.loginData[this.username].proPic;
-                        SeniorDataService.changePending = true;
-                        AWSService.getFirebaseToken();
-                        this.showLogin = false;
-                    }, 500);
+                    UserDataService.name = this.loginData[this.username].firstName;
+                    UserDataService.UserID = this.loginData[this.username].id;
+                    UserDataService.proPic = this.loginData[this.username].proPic;
+                    SeniorDataService.changePending = true;
+                    AWSService.getFirebaseToken();
+                    this.showLogin = false;
                 } else {
                     alert("Incorrect password.");
                 }
