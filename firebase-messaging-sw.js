@@ -1,3 +1,5 @@
+// Service worker for firebase notifications.
+
 importScripts("https://www.gstatic.com/firebasejs/4.9.1/firebase-app.js");
 importScripts("https://www.gstatic.com/firebasejs/4.9.1/firebase-messaging.js");
 

@@ -1,4 +1,6 @@
 angular.module("app").service("SeniorDataService", function (AWSService, RideRequest, ShoppingList, ShoppingItem, Activity, UserDataService) {
+    // --- SeniorDataService ---
+    // Stores user data to be accessed from other services and classes
     class SeniorDataService {
         constructor() {
             this.shoppingList = {};
@@ -18,6 +20,7 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
             }, 500)
         }
 
+        // get the activities from database and make Activiy objects from each
         initActivities() {
             let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
@@ -73,6 +76,8 @@ angular.module("app").service("SeniorDataService", function (AWSService, RideReq
             });
         }
 
+        // get ride requests, activites, and shopping list
+        // store all in this service to be used by other services
         init() {
             this.initActivities();
             AWSService.getRideRequests((err, data) => {

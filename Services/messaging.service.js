@@ -1,4 +1,11 @@
 angular.module("app").service("MessagingService", function (AWSService, UserDataService, Activity) {
+    // ---Messaging Service---
+    // This service is primarly manipulation of the HTML DOM, used for modifying the lists diplayed
+    // on the DOM (add messages, animations, etc.)
+
+    // This is sparsely commented due to the purpose being only HTML manipulation with no actual logic
+    // critical to the logic or functionality of the application.
+
     class MessagingService {
         constructor() {
             let _this = this;

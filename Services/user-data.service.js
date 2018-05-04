@@ -1,4 +1,5 @@
 angular.module("app").service("UserDataService", function () {
+    // --- UserDataService ---
     class UserDataService {
         constructor() {
             this.name = 'Lucas';

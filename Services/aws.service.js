@@ -1,20 +1,17 @@
 angular.module("app").service("AWSService", function (UserDataService) {
+    // --- AWSService ---
+    // Service that handles all interaction with AWS services (DynamoDB, Cognito)
     class AWSService {
         constructor() {
-            console.log("rendering");
             this.initAWS();
             this.documentClient = new AWS.DynamoDB.DocumentClient();
             this.sns = new AWS.SNS();
             this.cognito = new AWS.CognitoIdentityServiceProvider();
             this.previousTimestamp = null;
             this.userDataService = UserDataService;
-
-
-
-
-
         }
 
+        // get firebase token used for recieving notifications
         getFirebaseToken() {
             var config = {
                 apiKey: "AIzaSyALjVa5DXtXiZFhSHddwO-8_wVx7JyUuEQ",
@@ -46,6 +43,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // store the token in database for alexa skill and other caretakers to use to send notifcations to 
         storeToken(token) {
             var params = {
                 Key: {
@@ -62,6 +60,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             this.documentClient.update(params, function (err, data) {});
         }
 
+        // set configuration of AWS (region, poolID, clientID)
         initAWS() {
             AWS.config.update({
                 region: 'us-east-1'
@@ -78,6 +77,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
 
         }
 
+        // create a new account in cognito based on username, password, email
         signup(username, password, email) {
             var attribute = {
                 Name: 'email',
@@ -98,6 +98,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // authenticate user through cognito
         login(username, password, callbackFn) {
             var authenticationData = {
                 Username: username,
@@ -111,10 +112,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
             cognitoUser.authenticateUser(authenticationDetails, {
                 onSuccess: (result) => {
-                    //this.addUserAttribute('name', 'Lucas');
                     callbackFn(true);
-                    //console.log('access token + ' + result.getAccessToken().getJwtToken());
-                    //console.log('idToken + ' + result.idToken.jwtToken);
                 },
 
                 onFailure: (err) => {
@@ -136,8 +134,8 @@ angular.module("app").service("AWSService", function (UserDataService) {
 
         }
 
+        // add an attribute to cognito profile (such as first name, id, profession, etc.)
         addUserAttribute(field, value) {
-            console.log("adding attribute");
             var attributeList = [];
             var attribute = {
                 Name: field,
@@ -155,6 +153,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // get ride requests from database
         getRideRequests(callbackFn) {
             let params = {
                 TableName: 'Rides'
@@ -168,6 +167,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // get messages from database
         getMessages(callbackFn) {
             let params = {
                 TableName: 'Message'
@@ -181,6 +181,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // get shopping list from database
         getShoppingList(callbackFn) {
             var params = {
                 TableName: 'Shopping'
@@ -194,6 +195,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // get activites from database
         getActivities(callbackFn) {
             var params = {
                 TableName: 'Activity'
@@ -207,6 +209,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // log a change (used for updating the UI lists)
         recordChange() {
             var params = {
                 Key: {
@@ -223,12 +226,8 @@ angular.module("app").service("AWSService", function (UserDataService) {
             this.documentClient.update(params, function (err, data) {});
         }
 
+        // claim or unclaim ride and update in database
         toggleClaim(request, claim) {
-            if (claim) {
-                //                const subject = "Ride Confirmation";
-                //                const body = "You picked up a ride for '" + this.event + "' on: " + this.date + " at " + this.time + ". We will send you another reminder prior to the pickup time.";
-                //                this.sendEmail(subject, body);
-            }
             var params = {
                 Key: {
                     id: request.id
@@ -250,6 +249,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // pickup or un-pickup 
         togglePickup(item, pickedUp, callbackFn) {
             console.log(item.name + ' now ' + pickedUp);
             var params = {
@@ -274,6 +274,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // log an activity in database
         logActivity(activity) {
             var params = {
                 Key: {
@@ -302,6 +303,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             this.documentClient.update(params, function (err, data) {});
         }
 
+        // add message to database
         sendMessage(message, callbackFn) {
             var params = {
                 Key: {
@@ -337,6 +339,7 @@ angular.module("app").service("AWSService", function (UserDataService) {
             });
         }
 
+        // get last change timestamp from database
         getChangeStatus(callbackFn) {
             var params = {
                 TableName: 'UIData',
